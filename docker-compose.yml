@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"  # Expose Gunicorn server on port 5000
+    volumes:
+      - ./backend:/app  # Mount the backend directory for live code changes
+    environment:
+      - FLASK_ENV=development  # Set environment variables, if needed
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:8080"  # Map port 80 in the container to port 8080 on the host
+    volumes:
+      - ./frontend:/app  # Mount the frontend directory for live code changes
+      - /app/node_modules
+    depends_on:
+      - backend  # Ensure backend service is started first
+
+networks:
+  default:
+    name: mynetwork
